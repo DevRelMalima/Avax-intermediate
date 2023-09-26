@@ -1,5 +1,4 @@
-
-# DegenToken Smart Contract
+# DegenToken Smart Contract ETH-AVAX Intermediate Projects4
 
 This is a Solidity contract pertaining to the DegenToken, an ERC20 token that has been deployed onto the Avalanche network. This contract expands upon the capabilities of the OpenZeppelin `ERC20` and `Ownable` contracts, furnishing a range of functionalities including token minting, transferring, redeeming, burning, as well as the ability to verify token balances.
 

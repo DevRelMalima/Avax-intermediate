@@ -19,7 +19,7 @@ async function main() {
   `);
 
   // Run verification on the contract deployment
-  // yarn hardhat verify your-contract-address --network fuji
+  // npx hardhat verify your-contract-address --network fuji
 }
 
 // We recommend this pattern to be able to use async/await everywhere
