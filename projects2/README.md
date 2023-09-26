@@ -1,4 +1,4 @@
-# Building on Avalanche - ETH + AVAX Projects4 Documentation
+# Building on Avalanche - ETH + AVAX Projects2 Documentation
 
 # Description:
 This is the second project in AVAX-Intermediate, in this project I am tasked to create a simple contract with 2-3 functions. Then show the values of those functions in frontend of the application.

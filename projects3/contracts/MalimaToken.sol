@@ -15,8 +15,8 @@ contract MalimaTokenMint {
 
     // Constructor function that sets the token name, symbol, and owner
     constructor() {
-        tokenName = "Eth Malima Token projects 3";
-        tokenSymbol = "MLT";
+        tokenName = "AVAX Malima Token ";
+        tokenSymbol = "AMT";
         owner = msg.sender;
     }
 
