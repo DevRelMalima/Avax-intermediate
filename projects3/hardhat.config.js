@@ -5,7 +5,7 @@ module.exports = {
   defaultNetwork: "hardhat",
   networks: {
     hardhat: {
-      chainId: 1337
+      chainId: 1337, // Adjust the chainId if needed
     }
   },
   solidity: {
@@ -18,4 +18,3 @@ module.exports = {
     }
   }
 };
-

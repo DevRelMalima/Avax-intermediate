@@ -1,23 +1,27 @@
-// Importing ethers from the Hardhat library
-const { ethers } = require('hardhat');
+// imports
+const hre = require("hardhat");
+const fs = require('fs');
 
-// Define an asynchronous function named main()
+// function to deploy the contracts
 async function main() {
-    // Retrieve the factory to deploy the MalimaToken contract
-    const MalimaToken = await ethers.getContractFactory('MalimaToken');
 
-    // Deploy the MalimaToken contract with an initial supply of 1,000,000 tokens
-    const malimaToken = await MalimaToken.deploy(1000000);
+  //deploy the token
+  const Avax = await hre.ethers.getContractFactory("AvaxTokenMint");
+  const avax = await Avax.deploy();
+  await avax.deployed();
+  console.log("avax deployed to:", avax.address);
 
-    // Ensure the contract is deployed
-    await malimaToken.deployed();
 
-    // Log the address where the MalimaToken contract is deployed
-    console.log('MalimaToken deployed to:', malimaToken.address);
+  // export the addresses
+  fs.writeFileSync('scripts/address.js', `
+    export const avaxAddress = '${avax.address}'
+
+  `);
 }
 
-// Call the main function and handle any errors
-main().then(() => process.exit(0)).catch(error => {
+main()
+  .then(() => process.exit(0))
+  .catch((error) => {
     console.error(error);
     process.exit(1);
-});
+  });
