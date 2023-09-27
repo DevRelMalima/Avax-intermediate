@@ -1,27 +1,15 @@
-// imports
-const hre = require("hardhat");
-const fs = require('fs');
+const { ethers } = require('hardhat');
 
-// function to deploy the contracts
 async function main() {
+    const MalimaToken = await ethers.getContractFactory('MalimaToken');
+    const malimaToken = await MalimaToken.deploy(1000000); // Initial supply: 1,000,000 tokens
 
-  //deploy the token
-  const Malima = await hre.ethers.getContractFactory("MalimaTokenMint");
-  const malima = await Malima.deploy();
-  await malima.deployed();
-  console.log("malima deployed to:", malima.address);
+    await malimaToken.deployed();
 
-
-  // export the addresses
-  fs.writeFileSync('scripts/address.js', `
-    export const malimaAddress = '${malima.address}'
-
-  `);
+    console.log('MalimaToken deployed to:', malimaToken.address);
 }
 
-main()
-  .then(() => process.exit(0))
-  .catch((error) => {
+main().then(() => process.exit(0)).catch(error => {
     console.error(error);
     process.exit(1);
-  });
+});

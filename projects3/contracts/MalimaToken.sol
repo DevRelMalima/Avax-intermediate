@@ -1,61 +1,62 @@
 // SPDX-License-Identifier: MIT
-
 pragma solidity ^0.8.19;
 
-contract MalimaTokenMint {
+import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 
-    // Declare public variables
-    string public tokenName;
-    string public tokenSymbol;
-    uint256 public totalSupply;
-    address public owner;
+contract MyToken {
+    // Token information
+    string public name = "MalimaToken";  // Token name
+    string public symbol = "MLT";  // Token symbol
+    uint8 public decimals = 18;  // Number of decimal places in token value
+    uint256 public totalSupply;  // Total token supply
 
-    // Create a mapping of addresses to balances
-    mapping(address => uint256) public balance;
+    // Mapping to track balances of each address
+    mapping(address => uint256) public balanceOf;
 
-    // Constructor function that sets the token name, symbol, and owner
-    constructor() {
-        tokenName = "AVAX Malima Token ";
-        tokenSymbol = "AMT";
-        owner = msg.sender;
+    // Event emitted when tokens are transferred
+    event Transfer(address indexed from, address indexed to, uint256 value);
+
+    // Constructor to initialize the contract with an initial supply
+    constructor(uint256 initialSupply) {
+        totalSupply = initialSupply * 10 ** uint256(decimals);  // Set total supply
+        balanceOf[msg.sender] = totalSupply;  // Assign total supply to the contract creator
     }
 
-    // Modifier that only allows the owner to execute a function
-    modifier onlyOwner() {
-        require(msg.sender == owner, "Only owner can perform this action!");
-        _;
+    // Function to transfer tokens from sender to a specified address
+    function transfer(address to, uint256 value) public returns (bool) {
+        require(to != address(0), "Invalid address");  // Ensure the address is valid
+        require(balanceOf[msg.sender] >= value, "Insufficient balance");  // Check sender's balance
+
+        // Update balances
+        balanceOf[msg.sender] -= value;
+        balanceOf[to] += value;
+
+        // Emit a transfer event
+        emit Transfer(msg.sender, to, value);
+        return true;
     }
 
-    // This function allows only the owner of the contract to mint new tokens
-    function mint(address _recipient, uint256 _amount) public onlyOwner {
-        // Increase the total supply
-        totalSupply += _amount;
-        // Increase the balance of the specified address
-        balance[_recipient] += _amount;
+    // Function to burn (destroy) tokens
+    function burn(uint256 value) public {
+        require(balanceOf[msg.sender] >= value, "Insufficient balance");  // Check sender's balance
+
+        // Update balances and total supply
+        balanceOf[msg.sender] -= value;
+        totalSupply -= value;
+
+        // Emit a transfer event to address(0) (burned tokens)
+        emit Transfer(msg.sender, address(0), value);
     }
 
-    // This function allows anyone to burn their own tokens
-    // It takes one argument: the amount of tokens to burn
-    function burn(uint256 _amount) public {
-        // Make sure the sender has enough tokens to burn
-        require(balance[msg.sender] >= _amount, "Insufficient balance");
-        // Subtract the burn amount from the total supply
-        totalSupply -= _amount;
-        // Subtract the burn amount from the sender's balance
-        balance[msg.sender] -= _amount;
-    }
+    // Function to mint (create) new tokens and assign them to a specified address
+    function mint(address to, uint256 value) public {
+        require(to != address(0), "Invalid address");  // Ensure the address is valid
 
-    // Function that allows anyone to transfer tokens to another address
-    // This function transfers tokens from the sender to the recipient
-    // It takes two arguments: the recipient's address and the amount of tokens to transfer
-    function transfer(address _recipient, uint256 _amount) public {
-        // Make sure the sender is not the recipient
-        require(msg.sender != _recipient,"You can not transfer token(s) to yourself!");
-        // Make sure the sender has enough tokens to transfer
-        require(balance[msg.sender] >= _amount, "Transfer amount exceeds balance");
-        // Subtract the transfer amount from the sender's balance
-        balance[msg.sender] -= _amount;
-        // Add the transfer amount to the recipient's balance
-        balance[_recipient] += _amount;
+        // Update balances and total supply
+        balanceOf[to] += value;
+        totalSupply += value;
+
+        // Emit a transfer event from address(0) (minted tokens)
+        emit Transfer(address(0), to, value);
     }
 }
